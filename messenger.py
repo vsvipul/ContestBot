@@ -1,6 +1,3 @@
-# APP_SECRET = '496c03b39ce1906232a44ab0dc4e603d'
-# APP_ID = '828176374200571'
-
 import random
 from flask import Flask, request
 from pymessenger.bot import Bot
