@@ -54,3 +54,58 @@ if __name__ == "__main__":
     tempContests = searchInJSON(platform,datetime.now(tzoffset(None,19800)),0)
     print(platform,datetime.now(tzoffset(None,19800)))
     print(tempContests)
+
+def get_message(msg , recipent_id , kiska):
+    # get_context = Digflow(msg)
+    get_context = ["Hackerearth" , "search"]
+    if get_context[0] == "Hackerearth":
+        if get_context[1] == "search":
+            return do_what_i_say("HACKEREARTH")
+        elif get_context[1] == "reminder":
+            return set_reminder(get_context[2])
+    if get_context[0] == "Codeforces":
+        if get_context[1] == "search":
+            return do_what_i_say("Codeforces")
+        elif get_context[1] == "reminder":
+            return set_reminder(get_context[2])
+    if get_context[0] == "Codechef":
+        if get_context[1] == "search":
+            return do_what_i_say("Codechef")
+        elif get_context[1] == "reminder":
+            return set_reminder(get_context[2])
+
+def set_reminder(data , name):
+    #  do searching for related contest
+    A = readFromFile()
+    reply = None
+    for con in A:
+        if con["name"] == data["name"]:
+            reply = con
+            break
+    reminder.apply_async((data, reply) , eta=datetime.now() + data["time"])    
+
+
+def do_what_i_say(platfrom):
+    M = []
+    content = readFromFile()
+    for con in content:
+        if con["platform"] == platfrom:
+            M.append(con)
+    return M
+
+
+def update_every_six_hour():
+    A = scrapper.process()
+    printToFile(A)
+
+
+
+schedule.every(6).hour.do(update_every_six_hour)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
+
+    
+    
