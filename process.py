@@ -1,6 +1,5 @@
 import sources.scrapper as scrapper
 import json
-from multiprocessing import Process
 from dateutil.parser import parse
 from dateutil.tz import tzoffset
 from datetime import datetime
