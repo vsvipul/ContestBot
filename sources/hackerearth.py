@@ -2,7 +2,13 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from time import sleep 
 from dateutil.parser import parse
-
+from bs4 import BeautifulSoup
+import requests
+def getEndTime(link):
+    page = requests.get(link)
+    soup = BeautifulSoup(page.content,'html5lib')
+    endTime = soup.find_all('span',{"class":"timing-text"})[1]
+    return parse(endTime.text)
 def hackerearth():
     options = Options()
     options.add_argument("--headless")
@@ -22,14 +28,18 @@ def hackerearth():
                 tempContest = tempContest.find_element_by_class_name('challenge-content')
                 contestData = tempContest.find_elements_by_tag_name('div')
                 contestType = contestData[0].text
+                if(contestType=='HACKATHON'):
+                    continue
                 contestName = contestData[1].text
                 contestTime = contestData[2].find_element_by_class_name('date').text
                 contestTime = parse(contestTime)
+                contestEndTime = getEndTime(contestLink)
                 tempJSON = {
-                    'contestLink': contestLink,
-                    'contestType': contestType,
-                    'contestName': contestName,
-                    'contestTime': contestTime
+                    'link': contestLink,
+                    'name': contestName,
+                    'startTime': contestTime,
+                    'endTime': contestEndTime,
+                    'platform': 'HACKEREARTH'
                 }
                 contest_array.append(tempJSON)
             print("Done")
@@ -41,5 +51,6 @@ def hackerearth():
     browser.close()
     return contest_array
 
-arr = hackerearth()
-print(arr)
+if __name__ == "__main__":    
+    arr = hackerearth()
+    print(arr)
