@@ -12,7 +12,7 @@ def getEndTime(link):
 def hackerearth():
     options = Options()
     options.add_argument("--headless")
-    chromedriverPath = '../chrome/chromedriver'
+    chromedriverPath = 'chrome/chromedriver'
     browser = webdriver.Chrome(executable_path=chromedriverPath,chrome_options=options)
     browser.get('https://www.hackerearth.com/challenges/')
     loop_var =0

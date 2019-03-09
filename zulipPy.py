@@ -1,4 +1,5 @@
 import zulip
+import process
 client = zulip.Client(config_file="zuliprc")
 i =0
 while 1:
@@ -18,6 +19,7 @@ while 1:
         id = message['id']
         text = message['content']
         reply_to = message['sender_email']
+        reply = process.get_message(text,reply_to,'zulip')
         print(str(id)+" "+text)
         req = {
             'messages' : [id],
@@ -30,7 +32,7 @@ while 1:
         req = {
             "type": "private",
             "to": reply_to,
-            "content": "Go To Hell!!!"
+            "content": reply
         }
         result = client.send_message(req)
         read_id = result['id']
