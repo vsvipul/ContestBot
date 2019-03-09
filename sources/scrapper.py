@@ -6,13 +6,13 @@ def process():
     # Scrapping Codeforces
     contests = []
     tempContests = codeforces.codeforces()
-    contests.append(tempContests)
+    contests = contests+ tempContests
     #Scraping Codechef
     tempContests = codechef.codechef()
-    contests.append(tempContests)
+    contests = contests+ tempContests
     #Scraping Hackerearth
     tempContests = hackerearth.hackerearth()
-    contests.append(tempContests)
+    contests = contests+ tempContests
     return contests
 
 if __name__ == "__main__":

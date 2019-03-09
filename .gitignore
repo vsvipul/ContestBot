@@ -1,4 +1,5 @@
 zuliprc
 hack/
 bot/
+contest.json
 __pycache__/
