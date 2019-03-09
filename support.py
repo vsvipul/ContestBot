@@ -24,37 +24,35 @@ def webhook():
             inp.append(['Codeforces','Codechef','Hackerearth'])
         else:
             inp.append(req['queryResult']['parameters'])
+
+        inp.append("search")
+
+    elif action == 'reminder': # make necessary arrangements for index of reminder,also configure in diagflow
+        inp.append(None)
+        inp.append("reminder")
+
     
-    print(inp)
+    # print(inp)
         
-
     output = do_what_i_say(inp)
-    print(output)
-
+    # print(output)
 
     res = {
         "fulfillmentText": "fulfillmentText",
-        "fulfillmentMessages":
-        [
-            {
-                "simpleResponses":
-                {
-                    "simpleResponses":
-                    [
-                        {
-                            "textToSpeech":"textToSpeech",
-                            "displayText":"displayText"
-                        }
-                    ]
-                }
-            }
-        ],
-        "source":"webhook-sample"
+        "fulfillmentMessages":[],
+        "source":"contests from webhook"
     }
+    
     for contest in output:
-        contest['startTime'] = str(contest['startTime'])
-        contest['endTime'] = str(contest['endTime'])
-    output = json.dumps(output,indent=4)
+        displayText = contest['name'] + " From: "+str(contest['startTime']) + " To: "+str(contest['endTime']) + " on "+contest['platform']+ ". Go to: "+contest['link']
+
+        temp = {'simpleResponses':{'simpleResponses':[{"speech": "Text response",'displayText':displayText}]}}
+        res['fulfillmentMessages'].append(temp)
+
+    # Display this text in zulip and messenger
+
+    
+    output = json.dumps(res,indent=4)
     resp = Response(output)
     resp.headers['Content-Type'] = 'application/json'
 
