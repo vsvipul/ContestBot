@@ -1,0 +1,15 @@
+asn1crypto==0.24.0
+certifi==2018.11.29
+cffi==1.12.2
+chardet==3.0.4
+cryptography==2.6.1
+idna==2.8
+matrix-client==0.3.2
+pkg-resources==0.0.0
+pycparser==2.19
+pyOpenSSL==19.0.0
+requests==2.21.0
+six==1.12.0
+typing==3.6.6
+urllib3==1.24.1
+zulip==0.5.9
