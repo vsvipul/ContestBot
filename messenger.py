@@ -2,8 +2,6 @@ import random
 from flask import Flask, request
 from pymessenger.bot import Bot
 # import sources.hackerearth as hackerearth
-import process as process
-
 
 app = Flask(__name__)
 ACCESS_TOKEN = 'EAALxONaYePsBAM5oBExC3ZC9yFGVucIiZB7fxP00AKhZBc9gjPZAqtk7Ed8T8UlD8bhZBsA8pWIcSpPrGpItvUSEk1ZAMPfZBr6B7S5vXRUqzbpxJciSGFZCCWwRei8laoSqmCreAhYgXWva680ftzeZB89S9gbqZBCdPm5Tf0jcxxFQZDZD'
@@ -30,8 +28,7 @@ def receive_message():
                 recipient_id = message['sender']['id']
                 print(recipient_id)
                 if message['message'].get('text'):
-                    msg = message['message'].get('text')
-                    response_sent_text = process.get_message(msg , recipient_id , 'fb')
+                    response_sent_text = "okay"
                     send_message(recipient_id, response_sent_text)
     return "Message Processed"
 

@@ -1,4 +1,5 @@
 import requests
+from dateutil.parser import parse
 from bs4 import BeautifulSoup
 
 def codechef():
@@ -14,9 +15,9 @@ def codechef():
         tds = item.findAll('td')
         obj['link'] = 'https://www.codechef.com' + tds[1].contents[0]['href']
         obj['name'] = tds[1].contents[0].text
-        obj['startTime'] = tds[2]['data-starttime']
-        obj['endTime'] = tds[3]['data-endtime']
+        obj['startTime'] = parse(tds[2]['data-starttime'])
+        obj['endTime'] = parse(tds[3]['data-endtime'])
+        obj['platform'] = 'codechef'
         arr.append(obj)
 
-    print(arr)
     return arr
