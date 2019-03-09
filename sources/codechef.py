@@ -20,7 +20,4 @@ def codechef():
         obj['platform'] = 'codechef'
         arr.append(obj)
 
-    print(arr)
     return arr
-
-codechef()
