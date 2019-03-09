@@ -1,1 +1,5 @@
 zuliprc
+hack/
+bot/
+chrome/
+__pycache__/
