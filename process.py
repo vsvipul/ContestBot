@@ -3,7 +3,9 @@ import json
 from dateutil.parser import parse
 from dateutil.tz import tzoffset
 from datetime import datetime
+import schedule
 import pytz
+import time
 contestFile = 'contest.json'
 
 def get_message(text,reply,platform):
@@ -47,13 +49,14 @@ def searchInJSON(platform,startTime,endTime):
         contests = tempContests
     return contests
 
-if __name__ == "__main__":
-    contests = scrapper.process()
-    printToFile(contests)
-    platform = ['CODECHEF']
-    tempContests = searchInJSON(platform,datetime.now(tzoffset(None,19800)),0)
-    print(platform,datetime.now(tzoffset(None,19800)))
-    print(tempContests)
+
+# if __name__ == "__main__":
+#     contests = scrapper.process()
+#     printToFile(contests)
+    # platform = ['CODECHEF']
+    # tempContests = searchInJSON(platform,datetime.now(tzoffset(None,19800)),0)
+    # print(platform,datetime.now(tzoffset(None,19800)))
+    # print(tempContests)
 
 def get_message(msg , recipent_id , kiska):
     # get_context = Digflow(msg)
@@ -89,7 +92,7 @@ def do_what_i_say(platfrom):
     M = []
     content = readFromFile()
     for con in content:
-        if con["platform"] == platfrom:
+        if con["platform"] in platfrom[0]['Platform']:
             M.append(con)
     return M
 
@@ -99,13 +102,12 @@ def update_every_six_hour():
     printToFile(A)
 
 
+def ini():
+    update_every_six_hour()
+    schedule.every(6).hours.do(update_every_six_hour)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
-schedule.every(6).hour.do(update_every_six_hour)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-
-
-    
-    
+if __name__ == "__main__":
+    ini()
