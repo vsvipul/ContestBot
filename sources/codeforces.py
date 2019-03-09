@@ -1,8 +1,8 @@
 import requests
 from datetime import datetime,timedelta
-from dateutil.parser import parse
 
 cur = datetime.now()
+
 def codeforces():
     output = requests.get("http://codeforces.com/api/contest.list?gym=false").json()['result']
     
