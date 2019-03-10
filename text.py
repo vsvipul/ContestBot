@@ -5,24 +5,24 @@ def get_response(msg):
 
     # if 'reminder' in msg:
 
-    if msg == 'hi' or msg == 'hello':
+    if 'hi' in msg or 'hello' in msg:
         out = 'Hello ! I am ContestBot'
-        return out
+        return [out]
     
     elif 'show' in msg and 'contests' in msg:
         out = 'Select Platforms:\n'+ str(1) + ' Codeforces\n' + str(2) + ' Codechef\n' + str(3) + ' HackerEarth'
-        return out
+        return [out]
     
     out = [{ 'platform': [] }]
 
-    if 'codeforces' in msg :
-        out['platform'].append('codeforces')
+    if 'codeforces' in msg or 'cf' in msg:
+        out[0]['platform'].append('codeforces')
     
-    if 'hackerearth' in msg:
-        out['platform'].append('hackerearth')
+    if 'hackerearth' in msg or 'he' in msg:
+        out[0]['platform'].append('hackerearth')
 
-    if 'codechef' in msg :
-        out['platform'].append('codechef')
+    if 'codechef' in msg or 'cc' in msg:
+        out[0]['platform'].append('codechef')
 
     return out 
 

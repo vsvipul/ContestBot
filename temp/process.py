@@ -5,10 +5,9 @@ from dateutil.tz import tzoffset
 from datetime import datetime
 import schedule
 import pytz
+import schedule
 import time
-import text
 contestFile = 'contest.json'
-list_platform = []
 
 '''
 todo : 
@@ -58,53 +57,22 @@ def searchInJSON(platform,startTime,endTime):
 
 def get_message(msg , recipent_id , kiska):
     # get_context = Digflow(msg)
-    # get_context = ["Hackerearth" , "search"]
-    # if get_context[0] == "Hackerearth":
-    #     if get_context[1] == "search":
-    #         return do_what_i_say("HACKEREARTH")
-    #     elif get_context[1] == "reminder":
-    #         return set_reminder(get_context[2])
-    # if get_context[0] == "Codeforces":
-    #     if get_context[1] == "search":
-    #         return do_what_i_say("Codeforces")
-    #     elif get_context[1] == "reminder":
-    #         return set_reminder(get_context[2])
-    # if get_context[0] == "Codechef":
-    #     if get_context[1] == "search":
-    #         return do_what_i_say("Codechef")
-    #     elif get_context[1] == "reminder":
-    #         return set_reminder(get_context[2])
-
-    ans = []
-    idx =0
-    for i in range(len(msg['platform'])):
-        if msg['platform'][i] == 'codeforces':
-            ans = ans+ (do_what_i_say("CODEFORCES"))
-
-        elif msg['platform'][i] == 'hackerearth':
-            ans = ans + (do_what_i_say("HACKEREARTH"))
-
-        elif msg['platform'][i] == 'codechef':
-            ans = ans + (do_what_i_say("CODECHEF"))
-    ans2 = []
-    for i in ans:
-        ans2.append(str(idx+1)+'. '+i)
-        idx+=1
-    temp = ans2
-    return temp
-
-def helper(msg , recipent_id , kiska):
-    print('IN HELPER')
-    list_platform = text.get_response(msg)
-    print(list_platform)
-    if type(list_platform[0]) is not dict:
-        return list_platform
-    else:
-        temp = get_message(list_platform[0],recipent_id , kiska)
-        return temp
-        
-
-
+    get_context = ["Hackerearth" , "search"]
+    if get_context[0] == "Hackerearth":
+        if get_context[1] == "search":
+            return do_what_i_say("HACKEREARTH")
+        elif get_context[1] == "reminder":
+            return set_reminder(get_context[2], recipent_id, kiska)
+    if get_context[0] == "Codeforces":
+        if get_context[1] == "search":
+            return do_what_i_say("CODEFORCES")
+        elif get_context[1] == "reminder":
+            return set_reminder(get_context[2], recipent_id, kiska)
+    if get_context[0] == "Codechef":
+        if get_context[1] == "search":
+            return do_what_i_say("CODECHEF")
+        elif get_context[1] == "reminder":
+            return set_reminder(get_context[2], recipent_id, kiska)
 
 def set_reminder(data, recipent_id, kiska):
     #  do searching for related contest
@@ -137,10 +105,8 @@ def process_contests(contests):
     idx = 0
     arr = []
     for contest in contests:
-        arr.append(contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at [link](' + contest['link'] + ').\n')
+        arr.append(str(idx+1) + '. ' + contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at [link](' + contest['link'] + ').\n')
         idx+=1
-    print('+++++++++++++++')
-    print(arr)
     return arr
 
 
