@@ -33,16 +33,21 @@ def runzulip():
         }
         sleep(1)
         try:
+            # Read from private messages
             resultpriv = client.get_messages(requestPriv)
+            # Read from mentions
             resultment = client.get_messages(requestMent)
+            # Merge all unread messages
             messages = resultpriv['messages']+resultment['messages']
             for message in messages:
                 id = message['id']
                 text = message['content']
                 reply_to = message['sender_email']
+                # Get Reply from 
                 reply = process.helper(text,reply_to,'zulip')
                 queue.put({'text':reply,'reply':reply_to})
                 print(str(id)+" "+text)
+                # Mark message as read
                 req = {
                     'messages' : [id],
                     'op': 'add',
@@ -52,6 +57,7 @@ def runzulip():
                 print(result)
                 print(text+'\n')
                 for rep in reply:
+                    # Sending reply in private message
                     req = {
                         "type": "private",
                         "to": reply_to,
@@ -60,7 +66,8 @@ def runzulip():
                     result = client.send_message(req)
                     read_id = result['id']
                     print(read_id)
-                    try:
+                    # Mark sent message as read
+                    try:        # Just in case
                         req = {
                             'messages' : [read_id],
                             'op': 'add',
@@ -70,7 +77,7 @@ def runzulip():
                     except:
                         print("Error!")
                     print(result)
-        except Exception as E:
+        except Exception as E:      # Things can go wrong any time
             print(E)
             sleep(1)
 if __name__ == "__main__":
