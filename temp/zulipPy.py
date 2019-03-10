@@ -7,7 +7,6 @@ client = zulip.Client(config_file="zuliprc")
 i =0
 queue = Queue()
 def runzulip():
-    print('STARTING ZULIP!')
     while 1:
         requestPriv = {
             'use_first_unread_anchor':True,
@@ -40,7 +39,8 @@ def runzulip():
                 id = message['id']
                 text = message['content']
                 reply_to = message['sender_email']
-                reply = process.helper(text,reply_to,'zulip')
+                reply = process.get_message(text,reply_to,'zulip')
+
                 queue.put({'text':reply,'reply':reply_to})
                 print(str(id)+" "+text)
                 req = {
@@ -70,8 +70,7 @@ def runzulip():
                     except:
                         print("Error!")
                     print(result)
-        except Exception as E:
-            print(E)
+        except:
             sleep(1)
 if __name__ == "__main__":
     p = Process(target=runzulip)
