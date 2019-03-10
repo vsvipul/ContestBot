@@ -7,7 +7,6 @@ This bot aims to make the life of competitive programmers easy. This bot helps i
 ## Technologies Used
 
 - Python
-- DialogFlow (NLP)
 - BeautifulSoup and Selenium (for webscraping)
 - Celery (for  asynchronous task queue/job queue)
 - Zulip API
