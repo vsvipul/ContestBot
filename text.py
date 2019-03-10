@@ -1,9 +1,22 @@
 
 def get_response(msg):
-
+    print("yo")
     msg = msg.lower()
 
-    # if 'reminder' in msg:
+    if 'reminder' in msg:
+        l = []
+        num = 0
+        for i in range(len(msg)):
+            if msg[i] >= '0' and msg[i]<='9':
+                num = num*10+(int(msg[i]))
+            else:
+                if num:
+                    l.append(num)
+                num=0
+        if num:
+            l.append(num)
+        
+        return l
 
     if 'hi' in msg or 'hello' in msg:
         out = 'Hello ! I am ContestBot'
@@ -28,5 +41,5 @@ def get_response(msg):
 
 
 
-    
+get_response("set reminder for 2,3,25")
 

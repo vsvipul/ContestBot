@@ -95,8 +95,15 @@ def get_message(msg , recipent_id , kiska):
 
 def helper(msg , recipent_id , kiska):
     print('IN HELPER')
+
+    if 'reminder' in msg:
+        idx = text.get_response(msg)
+        set_reminder(idx,recipent_id,kiska)
+        return ['Reminder Set']
+
     list_platform = text.get_response(msg)
     print(list_platform)
+    
     if type(list_platform[0]) is not dict:
         return list_platform
     else:
