@@ -38,9 +38,20 @@ def send_message_from_zulip(recipient_id, response):
         }
     client.send_message(req)
 
+
+def process_contests(contests):
+    idx = 0
+    arr = []
+    for contest in contests:
+        arr.append(contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at [link](' + contest['link'] + ').\n')
+        idx+=1
+    return arr
+
+
+
 @app.task
 def reminder(konsa, reply, user):
-    if konsa == "messenger":    
+    if konsa == "messenger":  
         send_message_from_messenger(user, reply)
     elif konsa == "zulip":
         send_message_from_zulip(user, reply)

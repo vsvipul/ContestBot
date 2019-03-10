@@ -9,7 +9,9 @@ import time
 import text
 contestFile = 'contest.json'
 list_platform = []
-
+tempGB = {}
+reminder_file = 'reminder.json'
+from celery_tasks import reminder
 '''
 todo : 
     make a final multprocessing file
@@ -17,18 +19,29 @@ todo :
     make messenger.py and zulip.py more interactive
     correct the codechef randaap
  '''
+def printToString(contest,filename):
+    with open(filename,'w') as outfile:
+        json.dump(contest,outfile)
 
-def printToFile(contests):
+def printToFile(contests, filename):
+    print(contests)
+    print('++++++++++++++++++'+filename)
     for contest in contests:
         contest['startTime'] = str(contest['startTime'])
         contest['endTime'] = str(contest['endTime'])
         contest['platform'] = contest['platform'].upper()
-    with open(contestFile,'w') as outfile:
+    with open(filename,'w') as outfile:
         json.dump(contests,outfile)
 
-def readFromFile():
+def readFromString(file_name):
     contests = []
-    with open(contestFile) as json_file:
+    with open(file_name) as json_file:
+        contests = json.load(json_file)
+        return contests
+
+def readFromFile(file_name):
+    contests = []
+    with open(file_name) as json_file:
         contests = json.load(json_file)
         for contest in contests:
             contest['startTime'] = parse(contest['startTime'])
@@ -36,7 +49,7 @@ def readFromFile():
         return contests
 
 def searchInJSON(platform,startTime,endTime):
-    contests = readFromFile()
+    contests = readFromFile(contestFile)
     tempContests = []
     for contest in contests:
         if contest['platform'] in platform:
@@ -57,24 +70,6 @@ def searchInJSON(platform,startTime,endTime):
     return contests
 
 def get_message(msg , recipent_id , kiska):
-    # get_context = Digflow(msg)
-    # get_context = ["Hackerearth" , "search"]
-    # if get_context[0] == "Hackerearth":
-    #     if get_context[1] == "search":
-    #         return do_what_i_say("HACKEREARTH")
-    #     elif get_context[1] == "reminder":
-    #         return set_reminder(get_context[2])
-    # if get_context[0] == "Codeforces":
-    #     if get_context[1] == "search":
-    #         return do_what_i_say("Codeforces")
-    #     elif get_context[1] == "reminder":
-    #         return set_reminder(get_context[2])
-    # if get_context[0] == "Codechef":
-    #     if get_context[1] == "search":
-    #         return do_what_i_say("Codechef")
-    #     elif get_context[1] == "reminder":
-    #         return set_reminder(get_context[2])
-
     ans = []
     idx =0
     for i in range(len(msg['platform'])):
@@ -91,43 +86,64 @@ def get_message(msg , recipent_id , kiska):
         ans2.append(str(idx+1)+'. '+i)
         idx+=1
     temp = ans2
+    print(ans)
+    printToString(ans, reminder_file)
     return temp
+
+# import json
+# s = "{'muffin' : 'lolz', 'foo' : 'kitty'}"
+# json_acceptable_string = s.replace("'", "\"")
+# d = json.loads(json_acceptable_string)
 
 def helper(msg , recipent_id , kiska):
     print('IN HELPER')
-
+    print("msg" + msg)
     if 'reminder' in msg:
         idx = text.get_response(msg)
-        set_reminder(idx,recipent_id,kiska)
-        return ['Reminder Set']
-
+        print(idx)
+        return set_reminder(idx,recipent_id,kiska)
+    
     list_platform = text.get_response(msg)
     print(list_platform)
-    
+    print("It was a platform")
     if type(list_platform[0]) is not dict:
         return list_platform
     else:
         temp = get_message(list_platform[0],recipent_id , kiska)
+        print('----------------')
+        print(temp)
         return temp
         
 
 
 
-def set_reminder(data, recipent_id, kiska):
+def set_reminder(index, recipent_id, kiska):
     #  do searching for related contest
-    A = readFromFile()
-    delay = data["delay"]
-    reply = None
-    for con in A:
-        if con["name"] == data["name"]:
-            reply = con
-            break
-    reminder.apply_async((kiska, reply, recipent_id) , countdown=delay)    
+    if len(index) == 0:
+        return ["nothing set"]
+        # return reminder.apply_async((kiska, "bruh... select kr na", recipent_id))
+    A = []
+    try:
+        sent_data = readFromString(reminder_file)
+    except:
+        print("file nai hai")
+        return ["unknown"]
+
+    for i in index:
+        # reply = process_contests(data[int(i)-1])
+        reply = sent_data[i-1]
+        try:
+            date = (tempGB[sent_data[i-1]] - datetime.now()) 
+            delay = date.seconds + date.days*60*60*24 
+            reminder.apply_async((kiska, reply, recipent_id) , countdown=delay)
+        except:
+            pass
+    return ["Reminder has been set"]
 
 
 def do_what_i_say(platfrom):
     M = []
-    content = readFromFile()
+    content = readFromFile(contestFile)
     print(content)
     for contest in content:
         if contest['platform'] == platfrom:
@@ -135,19 +151,25 @@ def do_what_i_say(platfrom):
     F = process_contests(M)
     return F
 
+def gettimeleft_cc(time):
+	data = re.findall("\d+",time);
+	data = list(map(int,data));
+	timeleft=(datetime.datetime.strptime(time,"%d %b %Y\n%H:%M:%S")-datetime.datetime.utcnow()).total_seconds();
+	return timeleft-330*60;
+
 
 def update_every_six_hour():
     A = scrapper.process()
-    printToFile(A)
+    printToFile(A , contestFile)
 
 def process_contests(contests):
     idx = 0
     arr = []
     for contest in contests:
-        arr.append(contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at [link](' + contest['link'] + ').\n')
+        temp = contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at [link](' + contest['link'] + ').\n'
         idx+=1
-    print('+++++++++++++++')
-    print(arr)
+        tempGB[temp] = contest['startTime']
+        arr.append(temp)
     return arr
 
 
