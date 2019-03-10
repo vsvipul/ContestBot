@@ -54,6 +54,10 @@ This bot aims to make the life of competitive programmers easy. This bot helps i
    ```
     show cc/codechef
    ```
+5. Set Reminder after a query for some index number
+   ```
+   set reminder for index_number
+   ```
 
 ## What can it do?
 ContestBot can do a variety of things related to online competitive programming contests and make the life of coders easy. Some of them are-
