@@ -105,7 +105,7 @@ def process_contests(contests):
     idx = 0
     arr = []
     for contest in contests:
-        arr.append(str(idx+1) + '. ' + contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at- ' + contest['link'] + '.\n')
+        arr.append(str(idx+1) + '. ' + contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at [link](' + contest['link'] + ').\n')
         idx+=1
     return arr
 
