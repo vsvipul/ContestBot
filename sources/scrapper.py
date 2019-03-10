@@ -14,6 +14,3 @@ def process():
     tempContests = hackerearth.hackerearth()
     contests = contests+ tempContests
     return contests
-
-if __name__ == "__main__":
-    process()

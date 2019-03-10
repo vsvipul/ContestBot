@@ -9,24 +9,16 @@ ACCESS_TOKEN = 'EAALxONaYePsBAM5oBExC3ZC9yFGVucIiZB7fxP00AKhZBc9gjPZAqtk7Ed8T8Ul
 VERIFY_TOKEN = 'TESTINGTOKEN'
 bot = Bot(ACCESS_TOKEN)
 
-
-'''
-
-see, here we r going to send msgs so rather than importing 
-
-'''
-
 contestFile = 'contest.json'
-broker_url = 'pyamqp://guest@localhost//'
+# broker_url = 'pyamqp://guest@localhost//'  for localhost 
 broker_url1 = 'amqp://etpgqwsn:K9K3QCwBkCOmgHEPYDdcnpjoJKO_4ThI@eagle.rmq.cloudamqp.com/etpgqwsn'
 app = Celery('celery_tasks' ,broker=broker_url1)
-
 
 def readFromFile():
     with open(contestFile) as json_file:
         return json.load(json_file)
 
-def searchInJSON(platform,startTime,endTime):
+def searchInJSON(platform,startTime,endTime):  
     contests = readFromFile()
     tempContests = []
     for contest in contests:
@@ -47,12 +39,11 @@ def send_message_from_zulip(recipient_id, response):
     client.send_message(req)
 
 @app.task
-def reminder(data, reply,user):
-    recipient_id = data["user"]
-    if data["konsa"] == "messenger":    
-        send_message_from_messenger(recipient_id, reply)
-    elif data["konsa"] == "zulip":
-        send_message_from_zulip(recipient_id, reply)
+def reminder(konsa, reply, user):
+    if konsa == "messenger":    
+        send_message_from_messenger(user, reply)
+    elif konsa == "zulip":
+        send_message_from_zulip(user, reply)
 
 
 

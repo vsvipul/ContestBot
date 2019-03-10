@@ -5,17 +5,17 @@ from dateutil.tz import tzoffset
 from datetime import datetime
 import schedule
 import pytz
+import schedule
 import time
 contestFile = 'contest.json'
 
-def process_contests(contests):
-    arr = []
-    for idx, contest in contests:
-        arr.append(str(idx+1) + contest.name + ' on ' + contest.platform + ' starting at ' + contest.startTime + ' and ending at ' + contest.endTime + '. Register at- ' + contest.link + '.\n')
-    return arr
-
-def get_message(text,reply,platform):
-    return text
+'''
+todo : 
+    make a final multprocessing file
+    modify get_message
+    make messenger.py and zulip.py more interactive
+    correct the codechef randaap
+ '''
 
 def printToFile(contests):
     for contest in contests:
@@ -55,15 +55,6 @@ def searchInJSON(platform,startTime,endTime):
         contests = tempContests
     return contests
 
-
-# if __name__ == "__main__":
-#     contests = scrapper.process()
-#     printToFile(contests)
-    # platform = ['CODECHEF']
-    # tempContests = searchInJSON(platform,datetime.now(tzoffset(None,19800)),0)
-    # print(platform,datetime.now(tzoffset(None,19800)))
-    # print(tempContests)
-
 def get_message(msg , recipent_id , kiska):
     # get_context = Digflow(msg)
     get_context = ["Hackerearth" , "search"]
@@ -71,41 +62,53 @@ def get_message(msg , recipent_id , kiska):
         if get_context[1] == "search":
             return do_what_i_say("HACKEREARTH")
         elif get_context[1] == "reminder":
-            return set_reminder(get_context[2])
+            return set_reminder(get_context[2], recipent_id, kiska)
     if get_context[0] == "Codeforces":
         if get_context[1] == "search":
-            return do_what_i_say("Codeforces")
+            return do_what_i_say("CODEFORCES")
         elif get_context[1] == "reminder":
-            return set_reminder(get_context[2])
+            return set_reminder(get_context[2], recipent_id, kiska)
     if get_context[0] == "Codechef":
         if get_context[1] == "search":
-            return do_what_i_say("Codechef")
+            return do_what_i_say("CODECHEF")
         elif get_context[1] == "reminder":
-            return set_reminder(get_context[2])
+            return set_reminder(get_context[2], recipent_id, kiska)
 
-def set_reminder(data , name):
+def set_reminder(data, recipent_id, kiska):
     #  do searching for related contest
     A = readFromFile()
+    delay = data["delay"]
     reply = None
     for con in A:
         if con["name"] == data["name"]:
             reply = con
             break
-    reminder.apply_async((data, reply) , eta=datetime.now() + data["time"])    
+    reminder.apply_async((kiska, reply, recipent_id) , countdown=delay)    
 
 
 def do_what_i_say(platfrom):
     M = []
     content = readFromFile()
-    for con in content:
-        if con["platform"] in platfrom[0]['Platform']:
-            M.append(con)
-    return M
+    print(content)
+    for contest in content:
+        if contest['platform'] == platfrom:
+            M.append(contest)
+    F = process_contests(M)
+    return F
 
 
 def update_every_six_hour():
     A = scrapper.process()
     printToFile(A)
+
+def process_contests(contests):
+    idx = 0
+    arr = []
+    for contest in contests:
+        arr.append(str(idx+1) + '. ' + contest['name'] + ' on ' + contest['platform'] + ' starting at ' + str(contest['startTime']) + ' and ending at ' + str(contest['endTime']) + '. Register at- ' + contest['link'] + '.\n')
+        idx+=1
+    return arr
+
 
 
 def ini():
