@@ -28,13 +28,13 @@ def get_response(msg):
     
     out = [{ 'platform': [] }]
 
-    if 'codeforces' in msg or 'cf' in msg:
+    if 'codeforces' in msg or 'cf' in msg or 'all' in msg:
         out[0]['platform'].append('codeforces')
     
-    if 'hackerearth' in msg or 'he' in msg:
+    if 'hackerearth' in msg or 'he' in msg or 'all' in msg:
         out[0]['platform'].append('hackerearth')
 
-    if 'codechef' in msg or 'cc' in msg:
+    if 'codechef' in msg or 'cc' in msg or 'all' in msg:
         out[0]['platform'].append('codechef')
 
     return out 
