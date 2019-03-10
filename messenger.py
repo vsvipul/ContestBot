@@ -55,5 +55,9 @@ def send_message(recipient_id, response):
         bot.send_text_message(recipient_id, reply)
     return "success"
 
+def start():
+    print('START MESSENGER!')
+    app.run()
+
 if __name__ == "__main__":
     app.run(debug=True)
