@@ -1,7 +1,10 @@
 ## ContestBot
 A contest bot created during Hack On Hills 2019 at NIT Hamirpur. 
 
+Working video can be viewed [here](https://www.youtube.com/watch?v=96gnOQej_Uo&feature=youtu.be).
+
 ![ContestBot Working on Zulip](img.png?raw=true "ContestBot Working")
+
 
 ## Problem Solution
 This bot aims to make the life of competitive programmers easy. This bot helps in reminding programmers about programming contests held on various platforms like codechef, hackerearth and codeforces and the users can also command the bot to set reminders about any contest they wish to participate in.
