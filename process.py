@@ -8,6 +8,12 @@ import pytz
 import time
 contestFile = 'contest.json'
 
+def process_contests(contests):
+    arr = []
+    for idx, contest in contests:
+        arr.append(str(idx+1) + contest.name + ' on ' + contest.platform + ' starting at ' + contest.startTime + ' and ending at ' + contest.endTime + '. Register at- ' + contest.link + '.\n')
+    return arr
+
 def get_message(text,reply,platform):
     return text
 
