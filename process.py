@@ -7,7 +7,9 @@ import schedule
 import pytz
 import schedule
 import time
+import text
 contestFile = 'contest.json'
+list_platform = []
 
 '''
 todo : 
@@ -57,22 +59,49 @@ def searchInJSON(platform,startTime,endTime):
 
 def get_message(msg , recipent_id , kiska):
     # get_context = Digflow(msg)
-    get_context = ["Hackerearth" , "search"]
-    if get_context[0] == "Hackerearth":
-        if get_context[1] == "search":
-            return do_what_i_say("HACKEREARTH")
-        elif get_context[1] == "reminder":
-            return set_reminder(get_context[2], recipent_id, kiska)
-    if get_context[0] == "Codeforces":
-        if get_context[1] == "search":
-            return do_what_i_say("CODEFORCES")
-        elif get_context[1] == "reminder":
-            return set_reminder(get_context[2], recipent_id, kiska)
-    if get_context[0] == "Codechef":
-        if get_context[1] == "search":
-            return do_what_i_say("CODECHEF")
-        elif get_context[1] == "reminder":
-            return set_reminder(get_context[2], recipent_id, kiska)
+    # get_context = ["Hackerearth" , "search"]
+    # if get_context[0] == "Hackerearth":
+    #     if get_context[1] == "search":
+    #         return do_what_i_say("HACKEREARTH")
+    #     elif get_context[1] == "reminder":
+    #         return set_reminder(get_context[2])
+    # if get_context[0] == "Codeforces":
+    #     if get_context[1] == "search":
+    #         return do_what_i_say("Codeforces")
+    #     elif get_context[1] == "reminder":
+    #         return set_reminder(get_context[2])
+    # if get_context[0] == "Codechef":
+    #     if get_context[1] == "search":
+    #         return do_what_i_say("Codechef")
+    #     elif get_context[1] == "reminder":
+    #         return set_reminder(get_context[2])
+
+    ans = []
+
+    for i range(len(msg['platform'])):
+        if msg['platform'][i] == 'codeforces':
+            ans.append(do_what_i_say("Codeforces"))
+
+        elif msg['platform'][i] == 'hackerearth':
+            ans.append(do_what_i_say("HACKEREARTH"))
+
+        elif msg['platform'][i] == 'codechef':
+            ans.append(do_what_i_say("Codechef"))
+
+    return ans
+
+def helper(msg , recipent_id , kiska):
+    list_platform = text.get_response(msg)
+
+    if type(out) is not dict:
+        return out
+
+    else:
+        get_message(out,recipent_id , kiska)
+
+        
+
+
 
 def set_reminder(data, recipent_id, kiska):
     #  do searching for related contest
