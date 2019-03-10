@@ -50,7 +50,7 @@ def hackerearth():
                     'name': contestName,
                     'startTime': contestTime,
                     'endTime': contestEndTime,
-                    'platform': 'HACKEREARTH'
+                    'platform': 'Hackerearth'
                 }
                 contest_array.append(tempJSON)
             DEBUG("Done")
