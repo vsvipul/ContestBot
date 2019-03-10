@@ -7,7 +7,6 @@ This bot aims to make the life of competitive programmers easy. This bot helps i
 ## Technologies Used
 
 - Python
-- DialogFlow (NLP)
 - BeautifulSoup and Selenium (for webscraping)
 - Celery (for  asynchronous task queue/job queue)
 - Zulip API
@@ -15,8 +14,46 @@ This bot aims to make the life of competitive programmers easy. This bot helps i
 
 ### How to run
 
-1.  Clone this repo.  
+1. Clone this repo.  
+2. cd into the repo.
+3. Create a virtual environment and cd into it
+   ```
+   python3 -m venv hack
+   source hack/bin/activate
+   ```
+4. Install all requirements
+   ```
+   pip install -r requirements.txt
+   ```
+5. Run the command
+   ```
+   python3 multipro.py
+   ```
+6. In another terminal, run the command
+   ```
+   celery -A celery_tasks worker -l info
+   ```
+7. Join the zulip org [here](https://hoh.zulipchat.com/) and private message to @ContestBot with the commands given below to get the desired info.
+8. Create a fb page and an ngrok server and enter the ngrok address at messenger api settings, also enter the messenger api key to messenger.py file, then PM the fb page created with the commands given below to get the desired info.
 
+### Commands
+
+1. Show all upcoming contests
+   ```
+    show all
+   ```
+2. Show codeforces contests
+   ```
+   show cf/codeforces
+   ```
+3. Show hackerearth contests
+   ```
+   show he/hackerearth
+   ```
+4. Show codechef contests
+   ```
+    show cc/codechef
+   ```
 
 ## What can it do?
 ContestBot can do a variety of things related to online competitive programming contests and make the life of coders easy. Some of them are-
