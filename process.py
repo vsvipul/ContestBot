@@ -7,25 +7,22 @@ import schedule
 import pytz
 import time
 import text
+from celery_tasks import reminder
+
 contestFile = 'contest.json'
 list_platform = []
 tempGB = {}
 reminder_file = 'reminder.json'
-from celery_tasks import reminder
-'''
-todo : 
-    make a final multprocessing file
-    modify get_message
-    make messenger.py and zulip.py more interactive
-    correct the codechef randaap
- '''
+
+
 def printToString(contest,filename):
     with open(filename,'w') as outfile:
         json.dump(contest,outfile)
 
+
 def printToFile(contests, filename):
-    print(contests)
-    print('++++++++++++++++++'+filename)
+    # print(contests)
+    # print('++++++++++++++++++'+filename)
     for contest in contests:
         contest['startTime'] = str(contest['startTime'])
         contest['endTime'] = str(contest['endTime'])
@@ -33,11 +30,13 @@ def printToFile(contests, filename):
     with open(filename,'w') as outfile:
         json.dump(contests,outfile)
 
+
 def readFromString(file_name):
     contests = []
     with open(file_name) as json_file:
         contests = json.load(json_file)
         return contests
+
 
 def readFromFile(file_name):
     contests = []
@@ -47,6 +46,7 @@ def readFromFile(file_name):
             contest['startTime'] = parse(contest['startTime'])
             contest['endTime'] = parse(contest['endTime'])
         return contests
+
 
 def searchInJSON(platform,startTime,endTime):
     contests = readFromFile(contestFile)
@@ -69,64 +69,65 @@ def searchInJSON(platform,startTime,endTime):
         contests = tempContests
     return contests
 
+
 def get_message(msg , recipent_id , kiska):
     ans = []
-    idx =0
+    idx = 0
+
     for i in range(len(msg['platform'])):
         if msg['platform'][i] == 'codeforces':
-            ans = ans+ (do_what_i_say("CODEFORCES"))
+            ans = ans + (do_what_i_say("CODEFORCES"))
 
         elif msg['platform'][i] == 'hackerearth':
             ans = ans + (do_what_i_say("HACKEREARTH"))
 
         elif msg['platform'][i] == 'codechef':
             ans = ans + (do_what_i_say("CODECHEF"))
+
     ans2 = []
     for i in ans:
         ans2.append(str(idx+1)+'. '+i)
         idx+=1
+
     temp = ans2
-    print(ans)
+    # print(ans)
     printToString(ans, reminder_file)
     return temp
 
-# import json
-# s = "{'muffin' : 'lolz', 'foo' : 'kitty'}"
-# json_acceptable_string = s.replace("'", "\"")
-# d = json.loads(json_acceptable_string)
 
 def helper(msg , recipent_id , kiska):
-    print('IN HELPER')
-    print("msg" + msg)
+
+    # print('IN HELPER')
+    # print("msg" + msg)
+
     if 'reminder' in msg:
         idx = text.get_response(msg)
-        print(idx)
+        # print(idx)
         return set_reminder(idx,recipent_id,kiska)
     
     list_platform = text.get_response(msg)
-    print(list_platform)
-    print("It was a platform")
+    # print(list_platform)
+    # print("It was a platform")
     if type(list_platform[0]) is not dict:
         return list_platform
     else:
         temp = get_message(list_platform[0],recipent_id , kiska)
-        print('----------------')
-        print(temp)
+        # print('----------------')
+        # print(temp)
         return temp
         
-
 
 
 def set_reminder(index, recipent_id, kiska):
     #  do searching for related contest
     if len(index) == 0:
         return ["nothing set"]
-        # return reminder.apply_async((kiska, "bruh... select kr na", recipent_id))
+
     A = []
     try:
         sent_data = readFromString(reminder_file)
     except:
-        print("file nai hai")
+        print("File Doesn't Exist")
         return ["unknown"]
 
     for i in index:
@@ -138,7 +139,7 @@ def set_reminder(index, recipent_id, kiska):
             reminder.apply_async((kiska, reply, recipent_id) , countdown=delay)
         except:
             pass
-    return ["Reminder has been set"]
+    return ["Reminder has been set!"]
 
 
 def do_what_i_say(platfrom):
@@ -162,6 +163,7 @@ def update_every_six_hour():
     A = scrapper.process()
     printToFile(A , contestFile)
 
+
 def process_contests(contests):
     idx = 0
     arr = []
@@ -171,7 +173,6 @@ def process_contests(contests):
         tempGB[temp] = contest['startTime']
         arr.append(temp)
     return arr
-
 
 
 def ini():

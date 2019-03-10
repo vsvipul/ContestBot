@@ -1,6 +1,5 @@
-
 def get_response(msg):
-    print("yo")
+    # print("yo")
     msg = msg.lower()
 
     if 'reminder' in msg:
@@ -21,10 +20,14 @@ def get_response(msg):
     if 'hi' in msg or 'hello' in msg:
         out = 'Hello ! I am ContestBot'
         return [out]
-    
-    elif 'show' in msg and 'contests' in msg:
-        out = 'Select Platforms:\n'+ str(1) + ' Codeforces\n' + str(2) + ' Codechef\n' + str(3) + ' HackerEarth'
+
+    elif 'bye' in msg or 'tata' in msg:
+        out = 'Goodbye ! See you soon!'
         return [out]
+    
+    # elif 'show' in msg and 'contests' in msg:
+    #     out = 'Select Platforms:\n'+ str(1) + ' Codeforces\n' + str(2) + ' Codechef\n' + str(3) + ' HackerEarth'
+    #     return [out]
     
     out = [{ 'platform': [] }]
 
@@ -41,5 +44,5 @@ def get_response(msg):
 
 
 
-get_response("set reminder for 2,3,25")
+# get_response("set reminder for 2,3,25")
 
